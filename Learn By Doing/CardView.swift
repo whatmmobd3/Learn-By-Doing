@@ -2,9 +2,13 @@ import SwiftUI
 
 struct CardView: View {
     var card: Card
+    @State var fadeIn = false
+    @State var move = false
+    
     var body: some View {
         ZStack {
             Image(card.imageName)
+                .opacity(fadeIn ? 1.0 : 0.0)
             VStack {
                 Text(card.title)
                     .font(.largeTitle)
@@ -15,7 +19,7 @@ struct CardView: View {
                     .italic()
             }
             .foregroundColor(.white)
-            .offset(y: -210)
+            .offset(y: move ? -210 : -300)
             
             Button(action:{
                 print("Button Tapped")
@@ -34,12 +38,18 @@ struct CardView: View {
             .background(LinearGradient(colors: card.gradientColors, startPoint: .leading, endPoint: .trailing))
             .clipShape(Capsule())
             .shadow(color: Color("Colorshadow"), radius: 8, x: 0, y: 3)
-            .offset(y: 210)
+            .offset(y: move ? 210 : 300)
         }
         .frame(width: 345, height: 545)
         .background(LinearGradient(colors: card.gradientColors, startPoint: .top, endPoint: .bottom))
         .cornerRadius(16)
         .shadow(radius: 10)
+        .onAppear{
+            withAnimation(.linear(duration: 1.5)){
+                self.fadeIn.toggle()
+                self.move.toggle()
+            }
+        }
     }
 }
 
