@@ -2,7 +2,14 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        CardView()
+        ScrollView(.horizontal, showsIndicators: false){
+            HStack{
+                ForEach(0 ..< 6) { item in
+                    CardView()
+                }
+            }
+            .padding(.horizontal)
+        }
     }
 }
 
