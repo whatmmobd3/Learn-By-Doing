@@ -4,6 +4,9 @@ struct CardView: View {
     var card: Card
     @State var fadeIn = false
     @State var move = false
+    @State var showAlert = false
+    
+    var hapticImpact = UIImpactFeedbackGenerator(style: .heavy)
     
     var body: some View {
         ZStack {
@@ -20,10 +23,11 @@ struct CardView: View {
             }
             .foregroundColor(.white)
             .offset(y: move ? -210 : -300)
-            
             Button(action:{
                 print("Button Tapped")
                 playSound(sound: "sound-chime", type: ".mp3")
+                self.hapticImpact.impactOccurred()
+                self.showAlert.toggle()
             }){
                 HStack {
                     Text(card.callToAction.uppercased())
@@ -50,12 +54,19 @@ struct CardView: View {
                 self.move.toggle()
             }
         }
+        .alert(isPresented: $showAlert){
+            Alert(
+                title: Text(card.title),
+                message: Text(card.message),
+                dismissButton: .default(Text("OK"))
+            )
+        }
     }
 }
 
 struct CardView_Previews: PreviewProvider {
     static var previews: some View {
-        CardView(card: cardData[2])
+        CardView(card: cardData[1])
             .previewLayout(.sizeThatFits)
     }
 }
